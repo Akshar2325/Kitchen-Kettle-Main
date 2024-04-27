@@ -46,4 +46,4 @@ const getCart = async (req, res) => {
   }
 };
 
-export { addToCart, removeFromCart, getCart };
+export { addToCart, removeFromCart, getCart }
