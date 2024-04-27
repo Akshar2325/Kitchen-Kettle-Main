@@ -59,10 +59,14 @@ const placeOrder = async (req, res) => {
 const verifyOrder = async (req, res) => {
   const { orderId, success } = req.body;
   try {
-    if (success == "true") {
+    if (success === "true") {
       await orderModel.findByIdAndUpdate(orderId, { payment: true });
       res.json({ success: true, message: "Paid" });
     } else {
+      const existingOrder = await orderModel.findById(orderId);
+      if (!existingOrder) {
+        return res.json({ success: false, message: "Order not found" });
+      }
       await orderModel.findByIdAndDelete(orderId);
       res.json({ success: false, message: "Failed" });
     }
@@ -71,6 +75,7 @@ const verifyOrder = async (req, res) => {
     res.json({ success: false, message: "Error" });
   }
 };
+
 
 //user orders for frontend
 const userOrders = async (req, res) => {
